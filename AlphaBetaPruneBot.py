@@ -1,6 +1,7 @@
 from Bot import Bot
 from GameAction import GameAction
 from GameState import GameState
+from BotStep import BotStep
 import numpy as np
 
 class RandomBot(Bot):
@@ -21,11 +22,55 @@ class RandomBot(Bot):
                     result+=0.5
         return result
 
-    def minimax(game_board, alpha, beta, player_modifier):
-        #generate semua kemungkinan langkah yang mungkin terjadi
-        #kemungkinan terjadi adalah semua garis (jumlahnya adalah 24) dikurangi garis yang sudah digambar
-        possible_move_count = 24
+    def check_if_board_full(state:GameState):
+        all_row_marked = np.all(curr_state.row_status == 1)
+        all_col_marked = np.all(curr_state.col_status == 1)
+        return all_row_marked and all_col_marked
 
+    def minimax(self,curr_state:GameState, alpha:BotStep, beta:BotStep, player_modifier):
+        #function ini bakal rekursif, jadi basisnya adalah board_statusnya udah penuh
+        
+        if self.check_if_board_full(curr_state):
+            return self.obj_function(self, curr_state)
+
+        #minimizing
+        if (player_modifier == -1):
+
+            minVal = BotStep(float('-inf')) # negative infinity
+
+            #loop dari data garis row yang belum diisi
+            rows,cols = np.where(curr_state.row_status == 0)
+            for i in rows:
+                for j in cols:
+                    #generate semua kemungkinan langkah yang mungkin terjadi
+                    pass
+            
+            #loop dari data garis col yang belum diisi
+            rows,cols = np.where(curr_state.col_status == 0)
+            for i in rows:
+                for j in cols:
+                    #generate semua kemungkinan langkah yang mungkin terjadi
+                    pass
+
+        #maximizing
+        if (player_modifier == 1):
+
+            maxVal = BotStep(float('inf')) # positive infinity
+
+            #loop dari data garis row yang belum diisi
+            rows,cols = np.where(curr_state.row_status == 0)
+            for i in rows:
+                for j in cols:
+                    #generate semua kemungkinan langkah yang mungkin terjadi
+                    pass
+            
+            #loop dari data garis col yang belum diisi
+            rows,cols = np.where(curr_state.col_status == 0)
+            for i in rows:
+                for j in cols:
+                    #generate semua kemungkinan langkah yang mungkin terjadi
+                    pass
+        
     
     def get_action(self, state: GameState) -> GameAction:
         pass

@@ -17,7 +17,6 @@ class RandomBot(Bot):
             return self.get_random_row_action(state)
 
     def get_random_action(self, state: GameState) -> GameAction:
-        print(state.board_status)
         if random.random() < 0.5:
             return self.get_random_row_action(state)
         else:
