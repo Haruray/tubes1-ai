@@ -24,8 +24,11 @@ class BotStep():
         self.value = value
     def set_steps(self, steps):
         self.steps_recorded = steps
-    def add_step(self, step):
-        self.steps_recorded.append(step)
+    def add_step(self, new_step:list):
+        self.steps_recorded.append(new_step)
+
+    def clear_steps(self):
+        self.steps_recorded.clear()
     
     #operator overloading
     def __eq__(self, __o: object) -> bool:
