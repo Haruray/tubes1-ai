@@ -4,6 +4,7 @@ from GameState import GameState
 from BotStep import BotStep
 import numpy as np
 import copy
+import time
 
 class AlphaBetaPruneBot(Bot):
     def obj_function(self, state:GameState):
@@ -39,20 +40,23 @@ class AlphaBetaPruneBot(Bot):
         else:
             return bs2
 
-    def minimax(self,curr_state:GameState, alpha:BotStep, beta:BotStep,player_modifier, steps_recorded:list):
+    def minimax(self,curr_state:GameState, alpha:BotStep, beta:BotStep,player_modifier, steps_recorded:list, time_count):
         #function ini bakal rekursif, jadi basisnya adalah board_statusnya udah penuh
-        print(steps_recorded)
-        print(curr_state.board_status)
-        print("rows")
-        print(curr_state.row_status)
-        print("cols")
-        print(curr_state.col_status)
+        # print(steps_recorded)
+        # print(curr_state.board_status)
+        # print("rows")
+        # print(curr_state.row_status)
+        # print("cols")
+        # print(curr_state.col_status)
+
         number_of_dots = 4
+
+        time_now = time.time()
+        remainder = time_now - time_count
         
-        if self.check_if_board_full(curr_state):
+        if (self.check_if_board_full(curr_state) or round(remainder) >= 5):
             val = BotStep(self.obj_function(curr_state))
             val.set_steps(steps_recorded)
-            print("FULL")
             return val
 
         #minimizing
@@ -81,11 +85,12 @@ class AlphaBetaPruneBot(Bot):
 
                 #state telah dibuat, saatnya rekursif
                 steps_recorded.append(["row",i,j])
-                val = self.minimax(new_state, alpha, beta ,1, steps_recorded)
+                val = self.minimax(new_state, alpha, beta ,1, steps_recorded, time_count)
                 #copy steps yg udah diambil terlebih dahulu
-                min_val.set_steps(val.get_steps())
-                beta.set_steps(val.get_steps())
+                min_val.set_steps(copy.deepcopy(val.get_steps()))
+                beta.set_steps(copy.deepcopy(val.get_steps()))
                 #bandingkan min_val dengan val yang didapat. Ambil paling kecil
+
                 min_val = self.get_step_minimal(min_val, val)
                 beta = self.get_step_minimal(beta, min_val)
 
@@ -112,10 +117,10 @@ class AlphaBetaPruneBot(Bot):
 
                 #state telah dibuat, saatnya rekursif
                 steps_recorded.append(["col",i,j])
-                val = self.minimax(new_state, alpha, beta ,1, steps_recorded)
+                val = self.minimax(new_state, alpha, beta ,1, steps_recorded,time_count)
                 #copy steps yg udah diambil terlebih dahulu
-                min_val.set_steps(val.get_steps())
-                beta.set_steps(val.get_steps())
+                min_val.set_steps(copy.deepcopy(val.get_steps()))
+                beta.set_steps(copy.deepcopy(val.get_steps()))
                 #bandingkan min_val dengan val yang didapat. Ambil paling kecil
                 min_val = self.get_step_minimal(min_val, val)
                 beta = self.get_step_minimal(beta, min_val)
@@ -149,10 +154,10 @@ class AlphaBetaPruneBot(Bot):
 
                 #state telah dibuat, saatnya rekursif
                 steps_recorded.append(["row",i,j])
-                val = self.minimax(new_state, alpha, beta ,-1, steps_recorded)
+                val = self.minimax(new_state, alpha, beta ,-1, steps_recorded, time_count)
                 #copy steps yg udah diambil terlebih dahulu
-                max_val.set_steps(val.get_steps())
-                alpha.set_steps(val.get_steps())
+                max_val.set_steps(copy.deepcopy(val.get_steps()))
+                alpha.set_steps(copy.deepcopy(val.get_steps()))
                 #bandingkan min_val dengan val yang didapat. Ambil paling kecil
                 max_val = self.get_step_maximal(max_val, val)
                 alpha = self.get_step_maximal(alpha, max_val)
@@ -180,10 +185,10 @@ class AlphaBetaPruneBot(Bot):
 
                 #state telah dibuat, saatnya rekursif
                 steps_recorded.append(["col",i,j])
-                val = self.minimax(new_state, alpha, beta ,-1, steps_recorded)
+                val = self.minimax(new_state, alpha, beta ,-1, steps_recorded, time_count)
                 #copy steps yg udah diambil terlebih dahulu
-                max_val.set_steps(val.get_steps())
-                alpha.set_steps(val.get_steps())
+                max_val.set_steps(copy.deepcopy(val.get_steps()))
+                alpha.set_steps(copy.deepcopy(val.get_steps()))
                 #bandingkan min_val dengan val yang didapat. Ambil paling kecil
                 max_val = self.get_step_maximal(max_val, val)
                 alpha = self.get_step_maximal(alpha, max_val)
@@ -196,10 +201,12 @@ class AlphaBetaPruneBot(Bot):
     def get_action(self, state: GameState) -> GameAction:
         alpha = BotStep(float("-inf"))
         beta = BotStep(float("inf"))
-        result = self.minimax(state, alpha, beta, -1 if state.player1_turn else 1, [])
+        result = self.minimax(state, alpha, beta, 1 if state.player1_turn else -1, [], time.time())
 
-        step_type = result.get_first_step_type;
-        step_pos = [result.get_first_step_y, result.get_first_step_x]
+
+        step_type = result.get_first_step_type()
+        step_pos = (result.get_first_step_x(), result.get_first_step_y())
+        print(step_type, step_pos)
 
         return GameAction(step_type, step_pos)
 

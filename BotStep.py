@@ -17,6 +17,8 @@ class BotStep():
         return self.steps_recorded[0][2]
     def get_steps(self):
         return self.steps_recorded
+    def get_value(self):
+        return self.value
 
     def set_value(self, value):
         self.value = value
