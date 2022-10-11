@@ -41,6 +41,7 @@ class AlphaBetaPruneBot(Bot):
 
     def minimax(self,curr_state:GameState, alpha:BotStep, beta:BotStep,player_modifier, steps_recorded:list):
         #function ini bakal rekursif, jadi basisnya adalah board_statusnya udah penuh
+        print(steps_recorded)
         print(curr_state.board_status)
         print("rows")
         print(curr_state.row_status)
@@ -51,7 +52,7 @@ class AlphaBetaPruneBot(Bot):
         if self.check_if_board_full(curr_state):
             val = BotStep(self.obj_function(curr_state))
             val.set_steps(steps_recorded)
-            print("JANCOKKKKKK")
+            print("FULL")
             return val
 
         #minimizing
@@ -72,13 +73,14 @@ class AlphaBetaPruneBot(Bot):
                     curr_state.player1_turn
                 )
 
-                if j < (number_of_dots-1) and i < (number_of_dots-1):
+                if i < (number_of_dots-1) and j < (number_of_dots-1):
                     new_state.board_status[i][j] = (abs(new_state.board_status[i][j]) + 1) * player_modifier
-                new_state.board_status[i-1][j] = (abs(new_state.board_status[i-1][j]) + 1) * player_modifier
+                if (i > 0):
+                    new_state.board_status[i-1][j] = (abs(new_state.board_status[i-1][j]) + 1) * player_modifier
                 new_state.row_status[i][j] = 1
 
                 #state telah dibuat, saatnya rekursif
-                steps_recorded.append(["row",j,i])
+                steps_recorded.append(["row",i,j])
                 val = self.minimax(new_state, alpha, beta ,1, steps_recorded)
                 #copy steps yg udah diambil terlebih dahulu
                 min_val.set_steps(val.get_steps())
@@ -102,13 +104,14 @@ class AlphaBetaPruneBot(Bot):
                     curr_state.player1_turn
                 )
 
-                if j < (number_of_dots-1) and i < (number_of_dots-1):
+                if i < (number_of_dots-1) and j < (number_of_dots-1):
                     new_state.board_status[i][j] = (abs(new_state.board_status[i][j]) + 1) * player_modifier
-                new_state.board_status[i][j-1] = (abs(new_state.board_status[i][j-1]) + 1) * player_modifier
+                if (j > 0):
+                    new_state.board_status[i][j-1] = (abs(new_state.board_status[i][j-1]) + 1) * player_modifier
                 new_state.col_status[i][j] = 1
 
                 #state telah dibuat, saatnya rekursif
-                steps_recorded.append(["col",j,i])
+                steps_recorded.append(["col",i,j])
                 val = self.minimax(new_state, alpha, beta ,1, steps_recorded)
                 #copy steps yg udah diambil terlebih dahulu
                 min_val.set_steps(val.get_steps())
@@ -140,11 +143,12 @@ class AlphaBetaPruneBot(Bot):
 
                 if j < (number_of_dots-1) and i < (number_of_dots-1):
                     new_state.board_status[i][j] = (abs(new_state.board_status[i][j]) + 1) * player_modifier
-                new_state.board_status[i-1][j] = (abs(new_state.board_status[i-1][j]) + 1) * player_modifier
+                if (i > 0):
+                    new_state.board_status[i-1][j] = (abs(new_state.board_status[i-1][j]) + 1) * player_modifier
                 new_state.row_status[i][j] = 1
 
                 #state telah dibuat, saatnya rekursif
-                steps_recorded.append(["row",j,i])
+                steps_recorded.append(["row",i,j])
                 val = self.minimax(new_state, alpha, beta ,-1, steps_recorded)
                 #copy steps yg udah diambil terlebih dahulu
                 max_val.set_steps(val.get_steps())
@@ -168,13 +172,14 @@ class AlphaBetaPruneBot(Bot):
                     curr_state.player1_turn
                 )
 
-                if j < (number_of_dots-1) and i < (number_of_dots-1):
+                if i < (number_of_dots-1) and j < (number_of_dots-1):
                     new_state.board_status[i][j] = (abs(new_state.board_status[i][j]) + 1) * player_modifier
-                new_state.board_status[i][j-1] = (abs(new_state.board_status[i][j-1]) + 1) * player_modifier
+                if (j > 0):
+                    new_state.board_status[i][j-1] = (abs(new_state.board_status[i][j-1]) + 1) * player_modifier
                 new_state.col_status[i][j] = 1
 
                 #state telah dibuat, saatnya rekursif
-                steps_recorded.append(["col",j,i])
+                steps_recorded.append(["col",i,j])
                 val = self.minimax(new_state, alpha, beta ,-1, steps_recorded)
                 #copy steps yg udah diambil terlebih dahulu
                 max_val.set_steps(val.get_steps())
