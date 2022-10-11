@@ -15,6 +15,15 @@ class BotStep():
     def get_first_step_y(self):
         #return "row" atau "col"
         return self.steps_recorded[0][2]
+    def get_steps(self):
+        return self.steps_recorded
+
+    def set_value(self, value):
+        self.value = value
+    def set_steps(self, steps):
+        self.steps_recorded = steps
+    def add_step(self, step):
+        self.steps_recorded.append(step)
     
     #operator overloading
     def __eq__(self, __o: object) -> bool:
