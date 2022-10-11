@@ -23,8 +23,8 @@ class RandomBot(Bot):
         return result
 
     def check_if_board_full(state:GameState):
-        all_row_marked = np.all(curr_state.row_status == 1)
-        all_col_marked = np.all(curr_state.col_status == 1)
+        all_row_marked = np.all(state.row_status == 1)
+        all_col_marked = np.all(state.col_status == 1)
         return all_row_marked and all_col_marked
 
     def minimax(self,curr_state:GameState, alpha:BotStep, beta:BotStep, player_modifier):
