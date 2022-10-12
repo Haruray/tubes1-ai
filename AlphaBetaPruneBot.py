@@ -63,7 +63,7 @@ class AlphaBetaPruneBot(Bot):
             val.set_steps(steps_recorded)
             return val
 
-        #minimizing
+        #  === MINIMIZING === 
         end_loop = False
         if (player_modifier == -1):
 
@@ -136,7 +136,7 @@ class AlphaBetaPruneBot(Bot):
                         break  
             return min_val 
 
-        #maximizing
+        #  === MAXIMIZING === 
         if (player_modifier == 1):
 
             max_val = BotStep(float('-inf')) # positive infinity
