@@ -67,7 +67,7 @@ class AlphaBetaPruneBot(Bot):
         end_loop = False
         if (player_modifier == -1):
 
-            min_val = BotStep(float('inf')) # negative infinity
+            min_val = BotStep(float('inf')) # pos infinity
 
             #loop dari data garis row yang belum diisi
             rows,cols = np.where(curr_state.row_status == 0)
@@ -139,7 +139,7 @@ class AlphaBetaPruneBot(Bot):
         #  === MAXIMIZING === 
         if (player_modifier == 1):
 
-            max_val = BotStep(float('-inf')) # positive infinity
+            max_val = BotStep(float('-inf')) # neg infinity
 
             #loop dari data garis row yang belum diisi
             rows,cols = np.where(curr_state.row_status == 0)
@@ -209,7 +209,8 @@ class AlphaBetaPruneBot(Bot):
     def get_action(self, state: GameState) -> GameAction:
         alpha = BotStep(float("-inf"))
         beta = BotStep(float("inf"))
-        result = self.minimax(state, alpha, beta, 1, [], time.time())
+        player_modifier = -1 if state.player1_turn else 1
+        result = self.minimax(state, alpha, beta, player_modifier, [], time.time())
 
         step_type = result.get_first_step_type()
         step_pos = (result.get_first_step_y(), result.get_first_step_x())
