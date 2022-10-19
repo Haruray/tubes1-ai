@@ -17,7 +17,7 @@ class AlphaBetaPruneBot(Bot):
                     #Fungsi nilai(kotak) akan memberikan nilai 1 untuk kotak player tersebut
                     result+=1
                 elif (abs(square) ==  2):
-                    # 0.75 untuk kotak dengan 3 sisi
+                    # 0.75 untuk kotak dengan 2 sisi
                     result+=0.75
                 elif (abs(square) ==  1 or square==0):
                     #0.5 untuk kotak dengan 0 atau 1 sisi
