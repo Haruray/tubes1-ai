@@ -53,7 +53,7 @@ class AlphaBetaPruneBot(Bot):
 
         number_of_dots = 4
 
-        max_depth = 50 #ini max_depth berdasarkan jumlah garisnya, idk, cuma biar operasinya makin hemat aja
+        max_depth = 50 #ini max_depth berdasarkan jumlah garisnya dan dilebihkan, idk, cuma biar operasinya makin hemat aja
 
         time_now = time.time()
         remainder = time_now - time_count
