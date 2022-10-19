@@ -23,7 +23,7 @@ class LocalSearchBot(Bot):
                 elif (abs(square) ==  1 or square==0):
                     #0.5 untuk kotak dengan 0 atau 1 sisi
                     result+=0.5
-        return result * player_modifier
+        return result
 
     
     def get_step_maximal(self,bs1:BotStep, bs2:BotStep):
@@ -71,10 +71,7 @@ class LocalSearchBot(Bot):
             new_state_val = BotStep(self.obj_function(new_state))
             new_state_val.set_steps([["row", i, j]])
 
-            if (player_modifier==1):
-                max_val = self.get_step_maximal(max_val, new_state_val)
-            else:
-                max_val = self.get_step_minimal(max_val, new_state_val)
+            max_val = self.get_step_maximal(max_val, new_state_val)
 
             time_current = time.time()
             if (round(time_current - time_start) >= 5):
@@ -100,17 +97,14 @@ class LocalSearchBot(Bot):
                 new_state_val = BotStep(self.obj_function(new_state))
                 new_state_val.set_steps([["col", i, j]])
 
-                if (player_modifier==1):
-                    max_val = self.get_step_maximal(max_val, new_state_val)
-                else:
-                    max_val = self.get_step_minimal(max_val, new_state_val)
+                max_val = self.get_step_maximal(max_val, new_state_val)
 
         return max_val
 
     def get_action(self, state: GameState) -> GameAction:
         player_modifier = -1 if state.player1_turn else 1
         result = self.hill_climbing(state, player_modifier)
-        print(result.value)
+
         step_type = result.get_first_step_type()
         step_pos = (result.get_first_step_y(), result.get_first_step_x())
 

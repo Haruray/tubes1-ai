@@ -53,13 +53,19 @@ class AlphaBetaPruneBot(Bot):
 
         number_of_dots = 4
 
-        max_depth = 24 #ini max_depth berdasarkan jumlah garisnya, idk, cuma biar operasinya makin hemat aja
+        max_depth = 50 #ini max_depth berdasarkan jumlah garisnya, idk, cuma biar operasinya makin hemat aja
 
         time_now = time.time()
         remainder = time_now - time_count
         
         if (self.check_if_board_full(curr_state) or round(remainder) >= 5 or depth >= max_depth):
-            val = BotStep(self.obj_function(curr_state))
+            new_state = GameState(
+                copy.deepcopy(curr_state.board_status),
+                copy.deepcopy(curr_state.row_status),
+                copy.deepcopy(curr_state.col_status),
+                False if player_modifier==-1 else True
+            )
+            val = BotStep(self.obj_function(new_state))
             val.set_steps(steps_recorded)
             return val
 
@@ -79,18 +85,25 @@ class AlphaBetaPruneBot(Bot):
                     copy.deepcopy(curr_state.board_status),
                     copy.deepcopy(curr_state.row_status),
                     copy.deepcopy(curr_state.col_status),
-                    True if player_modifier==-1 else False
+                    False if player_modifier==-1 else True
                 )
 
                 if i < (number_of_dots-1) and j < (number_of_dots-1):
                     new_state.board_status[i][j] = (abs(new_state.board_status[i][j]) + 1) * player_modifier
+                    if (new_state.board_status[i][j] <= 4 * player_modifier):
+                        new_player_modifier = -1
+                    else:
+                        new_player_modifier = 1
                 if (i > 0):
                     new_state.board_status[i-1][j] = (abs(new_state.board_status[i-1][j]) + 1) * player_modifier
+                    if (new_state.board_status[i-1][j] <= 4 * player_modifier):
+                        new_player_modifier = -1
+                    else:
+                        new_player_modifier = 1
                 new_state.row_status[i][j] = 1
-
                 #state telah dibuat, saatnya rekursif
                 steps_recorded.append(["row",i,j]) #ini biar mengetahui langkah yang bakal diambil kalau ternyata ini merupakan langkah optimal
-                val = self.minimax(new_state, alpha, beta ,1, steps_recorded, time_count,depth+1)
+                val = self.minimax(new_state, alpha, beta ,new_player_modifier, steps_recorded, time_count,depth+1)
 
                 #bandingkan min_val dengan val yang didapat. Ambil paling kecil
 
@@ -113,18 +126,27 @@ class AlphaBetaPruneBot(Bot):
                         copy.deepcopy(curr_state.board_status),
                         copy.deepcopy(curr_state.row_status),
                         copy.deepcopy(curr_state.col_status),
-                        True if player_modifier==-1 else False
+                        False if player_modifier==-1 else True
                     )
 
                     if i < (number_of_dots-1) and j < (number_of_dots-1):
                         new_state.board_status[i][j] = (abs(new_state.board_status[i][j]) + 1) * player_modifier
+                        if (new_state.board_status[i][j] <= 4 * player_modifier):
+                            new_player_modifier = -1
+                        else:
+                            new_player_modifier = 1
                     if (j > 0):
                         new_state.board_status[i][j-1] = (abs(new_state.board_status[i][j-1]) + 1) * player_modifier
+                        if (new_state.board_status[i][j-1] <= 4 * player_modifier):
+                            new_player_modifier = -1
+                        else:
+                            new_player_modifier = 1
                     new_state.col_status[i][j] = 1
+
 
                     #state telah dibuat, saatnya rekursif
                     steps_recorded.append(["col",i,j])
-                    val = self.minimax(new_state, alpha, beta ,1, steps_recorded,time_count,depth+1)
+                    val = self.minimax(new_state, alpha, beta ,new_player_modifier, steps_recorded,time_count,depth+1)
 
                     #bandingkan min_val dengan val yang didapat. Ambil paling kecil
                     min_val = self.get_step_minimal(min_val, val)
@@ -150,18 +172,26 @@ class AlphaBetaPruneBot(Bot):
                     copy.deepcopy(curr_state.board_status),
                     copy.deepcopy(curr_state.row_status),
                     copy.deepcopy(curr_state.col_status),
-                    True if player_modifier==-1 else False
+                    False if player_modifier==-1 else True
                 )
 
                 if j < (number_of_dots-1) and i < (number_of_dots-1):
                     new_state.board_status[i][j] = (abs(new_state.board_status[i][j]) + 1) * player_modifier
+                    if (new_state.board_status[i][j] >= 4 * player_modifier):
+                        new_player_modifier = 1
+                    else:
+                        new_player_modifier = -1
                 if (i > 0):
                     new_state.board_status[i-1][j] = (abs(new_state.board_status[i-1][j]) + 1) * player_modifier
+                    if (new_state.board_status[i-1][j] >= 4 * player_modifier):
+                        new_player_modifier = 1
+                    else:
+                        new_player_modifier = -1
                 new_state.row_status[i][j] = 1
 
                 #state telah dibuat, saatnya rekursif
                 steps_recorded.append(["row",i,j])
-                val = self.minimax(new_state, alpha, beta ,-1, steps_recorded, time_count,depth+1)
+                val = self.minimax(new_state, alpha, beta ,new_player_modifier, steps_recorded, time_count,depth+1)
 
                 #bandingkan min_val dengan val yang didapat. Ambil paling kecil
                 max_val = self.get_step_maximal(max_val, val)
@@ -183,18 +213,27 @@ class AlphaBetaPruneBot(Bot):
                         copy.deepcopy(curr_state.board_status),
                         copy.deepcopy(curr_state.row_status),
                         copy.deepcopy(curr_state.col_status),
-                        True if player_modifier==-1 else False
+                        False if player_modifier==-1 else True
                     )
 
                     if i < (number_of_dots-1) and j < (number_of_dots-1):
                         new_state.board_status[i][j] = (abs(new_state.board_status[i][j]) + 1) * player_modifier
+                        if (new_state.board_status[i][j] >= 4 * player_modifier):
+                            new_player_modifier = 1
+                        else:
+                            new_player_modifier = -1
                     if (j > 0):
                         new_state.board_status[i][j-1] = (abs(new_state.board_status[i][j-1]) + 1) * player_modifier
+                        if (new_state.board_status[i][j-1] >= 4 * player_modifier):
+                            new_player_modifier = 1
+                        else:
+                            new_player_modifier = -1
+
                     new_state.col_status[i][j] = 1
 
                     #state telah dibuat, saatnya rekursif
                     steps_recorded.append(["col",i,j])
-                    val = self.minimax(new_state, alpha, beta ,-1, steps_recorded, time_count,depth+1)
+                    val = self.minimax(new_state, alpha, beta ,new_player_modifier, steps_recorded, time_count,depth+1)
                     #bandingkan min_val dengan val yang didapat. Ambil paling kecil
                     max_val = self.get_step_maximal(max_val, val)
                     alpha = self.get_step_maximal(alpha, max_val)
