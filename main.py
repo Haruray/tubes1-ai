@@ -8,6 +8,7 @@ import numpy as np
 from typing import Optional
 from Bot import Bot
 from AlphaBetaPruneBot import AlphaBetaPruneBot
+from LocalSearchBot import LocalSearchBot
 from GameState import GameState
 
 # * Import your bot
@@ -316,5 +317,5 @@ if __name__ == "__main__":
     BvB mode: game_instance = Dots_and_Boxes(BotName(), BotName())
     """
     # game_instance = Dots_and_Boxes(None, RandomBot())
-    game_instance = Dots_and_Boxes(None, AlphaBetaPruneBot())
+    game_instance = Dots_and_Boxes(LocalSearchBot(), AlphaBetaPruneBot())
     game_instance.mainloop()

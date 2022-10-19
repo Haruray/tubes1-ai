@@ -16,7 +16,7 @@ class AlphaBetaPruneBot(Bot):
                 if (square ==  4 * player_modifier):
                     #Fungsi nilai(kotak) akan memberikan nilai 1 untuk kotak player tersebut
                     result+=1
-                elif (abs(square) ==  3):
+                elif (abs(square) ==  2):
                     # 0.75 untuk kotak dengan 3 sisi
                     result+=0.75
                 elif (abs(square) ==  1 or square==0):
@@ -79,7 +79,7 @@ class AlphaBetaPruneBot(Bot):
                     copy.deepcopy(curr_state.board_status),
                     copy.deepcopy(curr_state.row_status),
                     copy.deepcopy(curr_state.col_status),
-                    False if player_modifier==-1 else True
+                    True if player_modifier==-1 else False
                 )
 
                 if i < (number_of_dots-1) and j < (number_of_dots-1):
@@ -113,7 +113,7 @@ class AlphaBetaPruneBot(Bot):
                         copy.deepcopy(curr_state.board_status),
                         copy.deepcopy(curr_state.row_status),
                         copy.deepcopy(curr_state.col_status),
-                        False if player_modifier==-1 else True
+                        True if player_modifier==-1 else False
                     )
 
                     if i < (number_of_dots-1) and j < (number_of_dots-1):
@@ -150,7 +150,7 @@ class AlphaBetaPruneBot(Bot):
                     copy.deepcopy(curr_state.board_status),
                     copy.deepcopy(curr_state.row_status),
                     copy.deepcopy(curr_state.col_status),
-                    False if player_modifier==-1 else True
+                    True if player_modifier==-1 else False
                 )
 
                 if j < (number_of_dots-1) and i < (number_of_dots-1):
@@ -183,7 +183,7 @@ class AlphaBetaPruneBot(Bot):
                         copy.deepcopy(curr_state.board_status),
                         copy.deepcopy(curr_state.row_status),
                         copy.deepcopy(curr_state.col_status),
-                        False if player_modifier==-1 else True
+                        True if player_modifier==-1 else False
                     )
 
                     if i < (number_of_dots-1) and j < (number_of_dots-1):
@@ -214,7 +214,6 @@ class AlphaBetaPruneBot(Bot):
 
         step_type = result.get_first_step_type()
         step_pos = (result.get_first_step_y(), result.get_first_step_x())
-        print(step_type, step_pos)
 
         return GameAction(step_type, step_pos)
 
