@@ -36,6 +36,16 @@ class LocalSearchBot(Bot):
             res.set_steps(copy.deepcopy(bs2.get_steps()))
             return res
 
+    def get_step_minimal(self,bs1:BotStep, bs2:BotStep):
+        if (bs1 < bs2):
+            res = BotStep(bs1.get_value())
+            res.set_steps(copy.deepcopy(bs1.get_steps()))
+            return res
+        else:
+            res = BotStep(bs2.get_value())
+            res.set_steps(copy.deepcopy(bs2.get_steps()))
+            return res
+
     
     def hill_climbing(self, curr_state:GameState, player_modifier):
         number_of_dots = 4
@@ -61,7 +71,10 @@ class LocalSearchBot(Bot):
             new_state_val = BotStep(self.obj_function(new_state))
             new_state_val.set_steps([["row", i, j]])
 
-            max_val = self.get_step_maximal(max_val, new_state_val)
+            if (player_modifier==1):
+                max_val = self.get_step_maximal(max_val, new_state_val)
+            else:
+                max_val = self.get_step_minimal(max_val, new_state_val)
 
             time_current = time.time()
             if (round(time_current - time_start) >= 5):
@@ -87,7 +100,10 @@ class LocalSearchBot(Bot):
                 new_state_val = BotStep(self.obj_function(new_state))
                 new_state_val.set_steps([["col", i, j]])
 
-                max_val = self.get_step_maximal(max_val, new_state_val)
+                if (player_modifier==1):
+                    max_val = self.get_step_maximal(max_val, new_state_val)
+                else:
+                    max_val = self.get_step_minimal(max_val, new_state_val)
 
         return max_val
 
